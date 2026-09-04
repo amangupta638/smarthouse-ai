@@ -1,0 +1,24 @@
+{
+    "model_name": "Linear Regression",
+    "dataset": "data/house_prices.csv",
+    "features": [
+        "area",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "location",
+        "parking",
+        "furnishing",
+        "property_type",
+        "age"
+    ],
+    "target": "price",
+    "training_rows": 800,
+    "testing_rows": 200,
+    "metrics": {
+        "MAE": 2703240.546679393,
+        "MSE": 12260458033815.193,
+        "RMSE": 3501493.6861024317,
+        "R2": 0.9244973892735172
+    }
+}

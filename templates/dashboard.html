@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | SmartHouse AI</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <div class="container">
+
+        <a
+            class="navbar-brand fw-bold"
+            href="{{ url_for('index') }}"
+        >
+            🏠 SmartHouse AI
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarNav"
+        >
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link active"
+                        href="{{ url_for('main.dashboard') }}"
+                    >
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('main.predict') }}"
+                    >
+                        Predict Price
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('main.history') }}"
+                    >
+                        History
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('main.profile') }}"
+                    >
+                        Profile
+                    </a>
+                </li>
+
+                {% if current_user.role == "admin" %}
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('admin.admin_panel') }}"
+                    >
+                        Admin
+                    </a>
+                </li>
+
+                {% endif %}
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link text-warning"
+                        href="{{ url_for('auth.logout') }}"
+                    >
+                        Logout
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<div class="container py-5">
+
+    <!-- HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h1 class="fw-bold mb-1">
+                Welcome, {{ current_user.name }} 👋
+            </h1>
+
+            <p class="text-muted mb-0">
+                Manage your SmartHouse AI activity.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('main.predict') }}"
+            class="btn btn-primary"
+        >
+            + New Prediction
+        </a>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Total Predictions
+                    </p>
+
+                    <h2 class="fw-bold">
+                        {{ history|length }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Latest Prediction
+                    </p>
+
+                    {% if history %}
+
+                    <h2 class="fw-bold text-success">
+                        ₹{{ "{:,.0f}".format(history[0].predicted_price) }}
+                    </h2>
+
+                    {% else %}
+
+                    <h2 class="fw-bold">
+                        ₹0
+                    </h2>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Machine Learning Model
+                    </p>
+
+                    <h4 class="fw-bold">
+                        Linear Regression
+                    </h4>
+
+                    <span class="badge bg-success">
+                        Active
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        🤖 Predict House Price
+                    </h5>
+
+                    <p class="text-muted">
+                        Enter property details and get an
+                        estimated house price.
+                    </p>
+
+                    <a
+                        href="{{ url_for('main.predict') }}"
+                        class="btn btn-outline-primary"
+                    >
+                        Start Prediction
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        🔎 Smart Property Search
+                    </h5>
+
+                    <p class="text-muted">
+                        Search properties using natural language.
+                    </p>
+
+                    <a
+                        href="{{ url_for('index') }}"
+                        class="btn btn-outline-primary"
+                    >
+                        Smart Search
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        📊 Prediction History
+                    </h5>
+
+                    <p class="text-muted">
+                        See all your previous predictions.
+                    </p>
+
+                    <a
+                        href="{{ url_for('main.history') }}"
+                        class="btn btn-outline-primary"
+                    >
+                        View History
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACCOUNT LINKS -->
+
+    <div class="card border-0 shadow-sm mb-5">
+
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-4">
+                Account & System
+            </h4>
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+
+                    <a
+                        href="{{ url_for('main.profile') }}"
+                        class="btn btn-outline-dark w-100"
+                    >
+                        👤 My Profile
+                    </a>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <a
+                        href="{{ url_for('main.history') }}"
+                        class="btn btn-outline-dark w-100"
+                    >
+                        📋 Full History
+                    </a>
+
+                </div>
+
+
+                {% if current_user.role == "admin" %}
+
+                <div class="col-md-4">
+
+                    <a
+                        href="{{ url_for('admin.admin_panel') }}"
+                        class="btn btn-outline-danger w-100"
+                    >
+                        🛠️ Admin Panel
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PREDICTION HISTORY -->
+
+    <div
+        class="card border-0 shadow-sm"
+        id="history"
+    >
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4 class="fw-bold mb-0">
+                    Recent Prediction History
+                </h4>
+
+                <a
+                    href="{{ url_for('main.history') }}"
+                    class="btn btn-sm btn-outline-primary"
+                >
+                    View All
+                </a>
+
+            </div>
+
+
+            {% if history %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Date</th>
+
+                            <th>Location</th>
+
+                            <th>Area</th>
+
+                            <th>Bedrooms</th>
+
+                            <th>Bathrooms</th>
+
+                            <th>Predicted Price</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for prediction in history[:5] %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td>
+                                {{ prediction.created_at.strftime('%d %b %Y') }}
+                            </td>
+
+                            <td>
+                                {{ prediction.location }}
+                            </td>
+
+                            <td>
+                                {{ prediction.area|int }} sq ft
+                            </td>
+
+                            <td>
+                                {{ prediction.bedrooms }}
+                            </td>
+
+                            <td>
+                                {{ prediction.bathrooms }}
+                            </td>
+
+                            <td class="fw-bold text-success">
+                                ₹{{ "{:,.0f}".format(prediction.predicted_price) }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="text-center py-5">
+
+                <div class="display-4 mb-3">
+                    📊
+                </div>
+
+                <h5 class="fw-bold">
+                    No predictions yet
+                </h5>
+
+                <p class="text-muted">
+                    Make your first house price prediction.
+                </p>
+
+                <a
+                    href="{{ url_for('main.predict') }}"
+                    class="btn btn-primary"
+                >
+                    Make First Prediction
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer class="bg-dark text-white py-4 mt-5">
+
+    <div class="container text-center">
+
+        <h5>
+            🏠 SmartHouse AI
+        </h5>
+
+        <p class="mb-0">
+            House Price Prediction using Machine Learning
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>

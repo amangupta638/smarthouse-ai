@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>SmartHouse AI | House Price Prediction</title>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+```
+
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+
+```
+<div class="container">
+
+    <a
+        class="navbar-brand fw-bold"
+        href="{{ url_for('index') }}"
+    >
+        🏠 SmartHouse AI
+    </a>
+
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div
+        class="collapse navbar-collapse"
+        id="navbarNav"
+    >
+
+        <ul class="navbar-nav ms-auto">
+
+            <li class="nav-item">
+                <a
+                    class="nav-link active"
+                    href="{{ url_for('index') }}"
+                >
+                    Home
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a
+                    class="nav-link"
+                    href="{{ url_for('main.predict') }}"
+                >
+                    Predict Price
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a
+                    class="nav-link"
+                    href="{{ url_for('auth.login') }}"
+                >
+                    Login
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a
+                    class="nav-link"
+                    href="{{ url_for('auth.register') }}"
+                >
+                    Register
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+```
+
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+============================================================ -->
+
+<section class="hero-section">
+
+```
+<div class="container">
+
+    <div class="row align-items-center min-vh-75">
+
+        <div class="col-lg-7">
+
+            <span class="badge bg-primary mb-3">
+                AI Powered House Price Prediction
+            </span>
+
+            <h1 class="display-4 fw-bold">
+
+                Predict Your House Price
+
+                <span class="text-primary">
+                    Using Machine Learning
+                </span>
+
+            </h1>
+
+            <p class="lead text-muted mt-3">
+
+                SmartHouse AI uses a Linear Regression
+                Machine Learning model to estimate house
+                prices based on property features such as
+                area, bedrooms, bathrooms and location.
+
+            </p>
+
+
+            <div class="mt-4">
+
+                <a
+                    href="{{ url_for('auth.register') }}"
+                    class="btn btn-primary btn-lg me-2"
+                >
+                    Get Started
+                </a>
+
+                <a
+                    href="{{ url_for('auth.login') }}"
+                    class="btn btn-outline-dark btn-lg"
+                >
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-5 mt-5 mt-lg-0">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold">
+                        🏠 Smart Prediction
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Enter your property details and
+                        get an estimated market price.
+
+                    </p>
+
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+
+                            <div class="feature-box">
+
+                                <h5>📊 ML</h5>
+
+                                <small>
+                                    Linear Regression
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6">
+
+                            <div class="feature-box">
+
+                                <h5>🔎 NLP</h5>
+
+                                <small>
+                                    Smart Property Search
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6">
+
+                            <div class="feature-box">
+
+                                <h5>⚡ API</h5>
+
+                                <small>
+                                    REST API
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6">
+
+                            <div class="feature-box">
+
+                                <h5>💾 DB</h5>
+
+                                <small>
+                                    SQLite Database
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- ============================================================
+     NLP SMART SEARCH
+============================================================ -->
+
+<section class="py-5">
+
+```
+<div class="container">
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body p-4 p-md-5">
+
+            <div class="text-center mb-4">
+
+                <span class="badge bg-success mb-2">
+                    NLP Smart Search
+                </span>
+
+                <h2 class="fw-bold">
+                    Find Your Ideal Property
+                </h2>
+
+                <p class="text-muted">
+
+                    Describe the house you want in
+                    normal language and SmartHouse AI
+                    will find matching properties.
+
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('main.smart_search') }}"
+            >
+
+                <div class="input-group input-group-lg">
+
+                    <input
+                        type="text"
+                        name="query"
+                        class="form-control"
+                        placeholder="Example: 3 bedroom house in Delhi under 80 lakh"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                    >
+                        🔎 Search
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="text-center mt-3">
+
+                <small class="text-muted">
+
+                    Try:
+                    <strong>
+                        "3 bedroom house in Delhi under 80 lakh"
+                    </strong>
+
+                    <br>
+
+                    or
+
+                    <strong>
+                        "2 BHK apartment in Lucknow below 50 lakh"
+                    </strong>
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS
+============================================================ -->
+
+<section class="py-5 bg-light">
+
+```
+<div class="container">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+            How SmartHouse AI Works
+        </h2>
+
+        <p class="text-muted">
+            Simple steps to estimate your house price
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <!-- STEP 1 -->
+
+        <div class="col-md-4">
+
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-5">
+                        📝
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        1. Enter Property Details
+                    </h5>
+
+                    <p class="text-muted">
+
+                        Enter area, bedrooms, bathrooms,
+                        location, parking and other details.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 2 -->
+
+        <div class="col-md-4">
+
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-5">
+                        🤖
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        2. AI Predicts Price
+                    </h5>
+
+                    <p class="text-muted">
+
+                        Our trained Linear Regression model
+                        processes the property information.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 3 -->
+
+        <div class="col-md-4">
+
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-5">
+                        💰
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        3. Get Estimated Price
+                    </h5>
+
+                    <p class="text-muted">
+
+                        Receive an estimated house price
+                        along with relevant property
+                        recommendations.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- ============================================================
+     FEATURES
+============================================================ -->
+
+<section class="py-5">
+
+```
+<div class="container">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+            SmartHouse AI Features
+        </h2>
+
+        <p class="text-muted">
+            Everything you need for intelligent property analysis
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-6 mb-3">
+                        🤖
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Machine Learning
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        House prices are predicted using
+                        a trained Linear Regression model.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-6 mb-3">
+                        🔎
+                    </div>
+
+                    <h5 class="fw-bold">
+                        NLP Smart Search
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Search properties using normal
+                        human language such as BHK,
+                        location and budget.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-6 mb-3">
+                        🏡
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Property Recommendations
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Get matching properties based
+                        on your predicted price and requirements.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-6 mb-3">
+                        ⚡
+                    </div>
+
+                    <h5 class="fw-bold">
+                        REST API
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Access the prediction system
+                        through REST API endpoints.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-6 mb-3">
+                        💾
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Database
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        User accounts, properties and
+                        prediction history are stored safely.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="display-6 mb-3">
+                        📊
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Prediction History
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Users can review previous
+                        house price predictions.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- ============================================================
+     PROJECT STATISTICS
+============================================================ -->
+
+<section class="py-5 bg-light">
+
+```
+<div class="container">
+
+    <div class="row text-center g-4">
+
+        <div class="col-md-3">
+
+            <h2 class="fw-bold text-primary">
+                1000+
+            </h2>
+
+            <p class="text-muted">
+                Training Records
+            </p>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <h2 class="fw-bold text-primary">
+                ML
+            </h2>
+
+            <p class="text-muted">
+                Linear Regression
+            </p>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <h2 class="fw-bold text-primary">
+                NLP
+            </h2>
+
+            <p class="text-muted">
+                Smart Search
+            </p>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <h2 class="fw-bold text-primary">
+                REST
+            </h2>
+
+            <p class="text-muted">
+                API Support
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- ============================================================
+     DISCLAIMER
+============================================================ -->
+
+<section class="py-4">
+
+```
+<div class="container">
+
+    <div class="alert alert-warning">
+
+        <strong>Disclaimer:</strong>
+
+        The displayed house price is an estimate
+        generated by a machine-learning model.
+        It should not be considered a professional
+        property valuation or guaranteed market price.
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+
+<footer class="bg-dark text-white py-4">
+
+```
+<div class="container text-center">
+
+    <h5>
+        🏠 SmartHouse AI
+    </h5>
+
+    <p class="mb-1">
+        House Price Prediction using Machine Learning
+    </p>
+
+    <small class="text-secondary">
+        BCA Internship Project
+    </small>
+
+</div>
+```
+
+</footer>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>
